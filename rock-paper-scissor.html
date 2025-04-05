@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rock Paper Scissors</title>
+  </head>
+  <body>
+    <h1>Rock Paper Scissors</h1>
+
+    <div class="scoreboard">
+      <p>
+        <b>Player: <span id="player-score">0</span></b>
+      </p>
+      <p>
+        <b>Computer: <span id="computer-score">0</span></b>
+      </p>
+    </div>
+
+    <h2>Make Your Move!</h2>
+
+    <div class="buttons">
+      <button class="rock" onclick="playGame('rock')">🪨 Rock</button>
+      <button class="paper" onclick="playGame('paper')">📄 Paper</button>
+      <button class="scissors" onclick="playGame('scissors')">
+        ✂️ Scissors
+      </button>
+    </div>
+
+    <div class="result-container">
+      <h3 id="result"></h3>
+    </div>
+    <button id="reset-btn" onclick="resetGame()">Play Again</button>
+
+    <!--Style sheet code-->
+    <style>
+      body {
+        color: black;
+        font-family: "Arial", sans-serif;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-image: url(images/rps-bc-img.jpeg);
+        background-size: cover;
+        background-position: center;
+        backdrop-filter: blur(2.5px);
+      }
+
+      h1 {
+        color: #4d5805ee;
+        text-shadow: 0px 0px 10px #00f3ff;
+      }
+
+      .scoreboard {
+        display: flex;
+        justify-content: center;
+        gap: 70px;
+        font-size: 20px;
+        background: rgba(7, 7, 7, 0.1);
+        padding: 10px 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        background-color: transparent;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      button {
+        font-size: 20px;
+        padding: 15px 25px;
+        margin: 10px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        color: rgb(61, 72, 4);
+      }
+
+      button:hover {
+        transform: scale(1.1);
+        box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.5);
+      }
+
+      .rock {
+        background-color: transparent;
+      }
+      .paper {
+        background-color: transparent;
+      }
+      .scissors {
+        background-color: transparent;
+      }
+
+      .result-container {
+        margin-top: 20px;
+        font-size: 22px;
+      }
+
+      #reset-btn {
+        background-color: #ff3f34;
+        color: white;
+        padding: 12px 25px;
+        border-radius: 10px;
+        font-size: 18px;
+        margin-top: 20px;
+        display: none;
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out;
+      }
+
+      #reset-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0px 0px 15px red;
+      }
+    </style>
+
+    <!--Java script code-->
+    <script>
+      let playerScore = localStorage.getItem("playerScore")
+        ? parseInt(localStorage.getItem("playerScore"))
+        : 0;
+      let computerScore = localStorage.getItem("computerScore")
+        ? parseInt(localStorage.getItem("computerScore"))
+        : 0;
+      // Game play algorithm
+      function playGame(playerChoice) {
+        let randomValue = Math.random();
+        let computerChoice = "";
+
+        if (randomValue < 1 / 3) {
+          computerChoice = "rock";
+        } else if (randomValue < 2 / 3) {
+          computerChoice = "paper";
+        } else {
+          computerChoice = "scissors";
+        }
+
+        let result = "";
+
+        if (playerChoice === computerChoice) {
+          result = "It's a tie!";
+        } else if (
+          (playerChoice === "rock" && computerChoice === "scissors") ||
+          (playerChoice === "paper" && computerChoice === "rock") ||
+          (playerChoice === "scissors" && computerChoice === "paper")
+        ) {
+          result = "You Win!";
+          playerScore++;
+          document.getElementById("player-score").textContent = playerScore;
+        } else {
+          result = "Computer Wins!";
+          computerScore++;
+          document.getElementById("computer-score").textContent = computerScore;
+        }
+
+        document.getElementById(
+          "result"
+        ).textContent = `You chose ${playerChoice}, Computer chose ${computerChoice}. ${result}`;
+        document.getElementById("reset-btn").style.display = "block";
+
+        if (playerScore === 10) {
+          window.location.href = "celebration.html?winner=Player";
+        } else if (computerScore === 10) {
+          window.location.href = "celebration.html?winner=Computer";
+        }
+      }
+      // reset function
+      function resetGame() {
+        document.getElementById("result").textContent = "";
+        document.getElementById("reset-btn").style.display = "none";
+      }
+      // update score function
+      function updateScore(winner) {
+        if (winner === "Player") {
+          playerScore++;
+        } else if (winner === "Computer") {
+          computerScore++;
+        }
+        // Save updated scores
+        localStorage.setItem("playerScore", playerScore);
+        localStorage.setItem("computerScore", computerScore);
+
+        document.getElementById("player-score").textContent = playerScore;
+        document.getElementById("computer-score").textContent = computerScore;
+
+        // Check if someone reached 10 points
+        if (playerScore === 10 || computerScore === 10) {
+          let winner = playerScore === 10 ? "Player" : "Computer";
+          window.location.href = `celebration.html?winner=${winner}`;
+        }
+      }
+    </script>
+  </body>
+</html>

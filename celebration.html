@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Winner</title>
+    <style>
+      body {
+        color: black;
+        font-family: "Arial", sans-serif;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        height: 75vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-image: url(images/celebration.jpeg);
+        background-size: cover;
+        background-position: center;
+        backdrop-filter: blur(2.5px);
+      }
+      h1 {
+        font-size: 50px;
+      }
+      .display {
+        align-content: center;
+        padding-top: 200px;
+        text-align: center;
+      }
+      #playAgainBtn {
+        background-color: red;
+        color: white;
+        font-size: 20px;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="display">
+      <h1>🎉 Congratulations! 🎉</h1>
+      <h2 id="winnerText"></h2>
+
+      <button id="playAgainBtn" onclick="url(rock-paper-scissor.html)">
+        Play Again
+      </button>
+    </div>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const winner = params.get("winner");
+
+      document.getElementById("winnerText").textContent = winner + " Wins!";
+
+      document
+        .getElementById("playAgainBtn")
+        .addEventListener("click", function () {
+          localStorage.setItem("playerScore", 0);
+          localStorage.setItem("computerScore", 0);
+
+          window.location.href = "rock-paper-scissor.html";
+        });
+    </script>
+  </body>
+</html>
